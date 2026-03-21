@@ -1,43 +1,77 @@
-# SETUP PHP
+# PathoFlow 
 
-Uma base de aplicação limpa (sem frameworks), para estudos em PHP Orientado a objetos.
+Sistema web em **PHP puro** para gestão de pacientes e exames em um fluxo simplificado de laboratório de anatomia patológica.
 
-Essa estrutura já está dockerizada, então basta ter o docker compose rodando em seu computador que é pra dar tudo certo.
+O projeto foi desenvolvido como peça de portfólio com foco em demonstrar conhecimentos práticos em:
 
-## Tecnologias
+- PHP 8.3 (Vanilla)
+- MySQL 8.0
+- HTML, CSS e JavaScript
+- Docker & Docker Compose
+- Git e organização de projeto profissional
 
-- PHP 8.3
-- MySQL
-- nginx
+## Objetivo do Projeto
 
-## Como usar
+O **PathoFlow** é um MVP de um sistema LIS (Laboratory Information System) voltado para o controle básico de:
 
-Primeiro basta clonar o repositório
+- Cadastro centralizado de pacientes com validação de CPF.
+- Registro de exames e amostras vinculados ao paciente.
+- Acompanhamento de status do exame (Recebido, Em Análise, Finalizado).
+- Organização de dados laboratoriais com integridade referencial.
 
-`git clone https://github.com/alessandrofeitoza/setup-php-docker`
+## Estrutura do Projeto
 
-Agora entre na pasta com o terminal 
+```text
+.
+├── docker/             # Configurações de ambiente (PHP, Nginx, MySQL)
+├── public/             # Ponto de entrada da aplicação (index.php, assets)
+├── routes/             # Lógica de roteamento simples
+├── src/                # Core da aplicação (Classes, Configurações, Models)
+├── db.sql              # Script de criação e povoamento do banco
+├── docker-compose.yml  # Orquestração dos containers
+└── README.md
+```
 
-`cd setup-php-docker`
+## Como Rodar a Aplicação
+1. Clonar o repositório
+```bash
+git clone https://github.com/SamylleMaria/PathoFlow.git
+cd PathoFlow
+```
+2. Subir os containers
+```bash
+docker-compose up -d
+```
+3. Acessar no navegador
+A aplicação está configurada para rodar na porta 8001:
+👉 http://localhost:8001
 
-E agora basta rodar o docker
+## Gestão do Banco de Dados
+O banco de dados MySQL está exposto externamente na porta 3301.
 
-`docker-compose up -d`
+### Opção A: Povoamento Automático (Recomendado)
+Para criar as tabelas e inserir os dados de teste (pacientes e exames) a partir do arquivo db.sql:
+```bash
+docker exec -i pathoflow_db mysql -u root -proot pathoflow_db < db.sql
+```
 
-Pronto,é sucesso!
+### Opção B: Acesso Manual via Terminal (CLI)
+Para rodar comandos SQL manualmente ou inspecionar as tabelas:
+```bash
+docker exec -it pathoflow_db mysql -u root -proot pathoflow_db
+```
 
-Acesse o http://localhost:8080
+## Modelagem de Dados (Fase Atual)
+### Tabela pacientes
+Armazena os dados cadastrais. O campo CPF possui restrição de unicidade para evitar duplicidade de prontuários.
 
+### Tabela exames
+Gerencia as amostras. Possui relacionamento (FK) com a tabela de pacientes e controle automático de data de entrada e última atualização de status.
 
-## Para alterar alguma coisa
+## Status do Projeto
+Atualmente o projeto concluiu a Fase 2 (Modelagem e Infraestrutura).
+As próximas etapas incluem:
 
-Dentro da pasta `public` existe um arquivo `index.php`, altere-o, salve e dê um F5 lá no navegaro <http://localhost:8080>
-
-## Para entrar no banco de dados
-`docker compose exec mysql bash`
-
-O usuario do banco é `user` e a senha é `password`
-
-> Basta  logar no mysql: `mysql -u user -ppassword`;
-
-Agora é só copiar o conteudo do arquivo [db.sql](db.sql), dá um enter e tá pronto o sorvetinho.
+- Implementação da conexão PDO.
+- Desenvolvimento das telas de listagem e cadastro.
+- Lógica de atualização de status via PHP.
