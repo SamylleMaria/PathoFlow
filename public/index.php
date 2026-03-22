@@ -1,4 +1,6 @@
 <?php
-?>
-<h1>Olá, Mundo!</h1>
+require_once '../src/conexao.php';
 
+if ($pdo) {
+    echo "Conexão com o banco funcionando!";
+}
