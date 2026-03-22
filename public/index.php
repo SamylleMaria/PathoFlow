@@ -1,6 +1,6 @@
 <?php
 require_once '../src/conexao.php';
 
-if ($pdo) {
+if ($dsn) {
     echo "Conexão com o banco funcionando!";
 }
